@@ -43,14 +43,14 @@ export default function Home() {
       <div className="flex p-4 justify-end items-end ">
         <ModeToggle />
       </div>
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex flex-col px-3 items-center justify-center min-h-screen">
         <form onSubmit={handleSearch} className="w-full max-w-md">
           <Textarea
             placeholder="Enter target website URLs (comma or line-separated)"
             value={targetUrls}
             onChange={(e) => setTargetUrls(e.target.value)}
             required
-            className="w-full h-36 mx-3 py-2 mb-4 border rounded-md"
+            className="w-full h-36 mb-4 border rounded-md"
           />
 
           <Input
@@ -59,11 +59,11 @@ export default function Home() {
             value={linkToFind}
             onChange={(e) => setLinkToFind(e.target.value)}
             required
-            className="w-full mx-3 py-2 mb-4 border rounded-md"
+            className="w-full mb-4 border rounded-md"
           />
           <Button
             type="submit"
-            className="w-full mx-3 py-2 rounded-md flex justify-center items-center"
+            className="w-full  rounded-md flex justify-center items-center"
             disabled={loading}
           >
             {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
@@ -82,7 +82,7 @@ const ResultsTable = ({
   searchResults: { [key: string]: string };
 }) => {
   return (
-    <Table className="m-2 items-center justify-center">
+    <Table className="mt-4 items-center justify-center">
       <TableCaption>Your Search Results</TableCaption>
       <TableHeader>
         <TableRow>
