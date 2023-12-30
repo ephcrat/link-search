@@ -87,12 +87,15 @@ const ResultsTable = ({
           <TableRow key={url}>
             <TableCell>{url}</TableCell>
             <TableCell>
-              <Badge
-                variant="outline"
-                className={`bg-${status === "Found" ? "emerald" : "red"}-600`}
-              >
-                {status}
-              </Badge>
+              {status === "Found" ? (
+                <Badge variant="outline" className="bg-emerald-600">
+                  {status}
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="bg-red-600">
+                  {status}
+                </Badge>
+              )}
             </TableCell>
           </TableRow>
         ))}
