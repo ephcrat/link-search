@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { useTheme } from "next-themes";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 
 export default function Home() {
@@ -22,16 +22,19 @@ export default function Home() {
   const [searchResults, setSearchResults] = useState<{ [key: string]: string }>(
     {}
   );
-  const { theme } = useTheme();
-  console.log(theme);
+  const [loading, setLoading] = useState(false);
+
   const handleSearch = async (e: FormEvent) => {
     e.preventDefault();
     const targets = targetUrls.split(/\s*,\s*|\s+/); // Split by comma or whitespace
     try {
+      setLoading(true);
       const response = await axios.post("/api/search", { targets, linkToFind });
       setSearchResults(response.data.results);
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,8 +61,13 @@ export default function Home() {
             required
             className="w-full mx-3 py-2 mb-4 border rounded-md"
           />
-          <Button type="submit" className="w-full mx-3 py-2 rounded-md">
-            Search
+          <Button
+            type="submit"
+            className="w-full mx-3 py-2 rounded-md flex justify-center items-center"
+            disabled={loading}
+          >
+            {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+            {loading ? "Searching..." : "Search"}
           </Button>
         </form>
         <ResultsTable searchResults={searchResults} />
