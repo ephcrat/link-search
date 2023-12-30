@@ -89,7 +89,7 @@ const ResultsTable = ({
             <TableCell>
               <Badge
                 variant="outline"
-                className={` bg-${status === "Found" ? "emerald" : "red"}-600`}
+                className={`bg-${status === "Found" ? "emerald" : "red"}-600`}
               >
                 {status}
               </Badge>
