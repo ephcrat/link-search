@@ -13,6 +13,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { useTheme } from "next-themes";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 export default function Home() {
   const [targetUrls, setTargetUrls] = useState<string>("");
@@ -20,7 +22,8 @@ export default function Home() {
   const [searchResults, setSearchResults] = useState<{ [key: string]: string }>(
     {}
   );
-
+  const { theme } = useTheme();
+  console.log(theme);
   const handleSearch = async (e: FormEvent) => {
     e.preventDefault();
     const targets = targetUrls.split(/\s*,\s*|\s+/); // Split by comma or whitespace
@@ -33,33 +36,35 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <form onSubmit={handleSearch} className="w-full max-w-md">
-        <Textarea
-          placeholder="Enter target website URLs (comma or line-separated)"
-          value={targetUrls}
-          onChange={(e) => setTargetUrls(e.target.value)}
-          required
-          className="w-full h-36 mx-3 py-2 mb-4 border rounded-md border-black"
-        />
+    <>
+      <div className="flex p-4 justify-end items-end ">
+        <ModeToggle />
+      </div>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <form onSubmit={handleSearch} className="w-full max-w-md">
+          <Textarea
+            placeholder="Enter target website URLs (comma or line-separated)"
+            value={targetUrls}
+            onChange={(e) => setTargetUrls(e.target.value)}
+            required
+            className="w-full h-36 mx-3 py-2 mb-4 border rounded-md"
+          />
 
-        <Input
-          type="text"
-          placeholder="Enter specific link URL to find"
-          value={linkToFind}
-          onChange={(e) => setLinkToFind(e.target.value)}
-          required
-          className="w-full mx-3 py-2 mb-4 border border-black rounded-md"
-        />
-        <Button
-          type="submit"
-          className="w-full mx-3 py-2 text-white rounded-md"
-        >
-          Search
-        </Button>
-      </form>
-      <ResultsTable searchResults={searchResults} />
-    </div>
+          <Input
+            type="text"
+            placeholder="Enter specific link URL to find"
+            value={linkToFind}
+            onChange={(e) => setLinkToFind(e.target.value)}
+            required
+            className="w-full mx-3 py-2 mb-4 border rounded-md"
+          />
+          <Button type="submit" className="w-full mx-3 py-2 rounded-md">
+            Search
+          </Button>
+        </form>
+        <ResultsTable searchResults={searchResults} />
+      </div>
+    </>
   );
 }
 
