@@ -7,23 +7,29 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { targetUrl, linkToFind } = req.body;
+    const { targets, linkToFind } = req.body;
+    let results: { [key: string]: string } = {};
 
-    try {
-      const response = await axios.get(targetUrl);
-      const html = response.data;
-      const $ = cheerio.load(html);
-      const links = $("a")
-        .map((i, el) => $(el).attr("href"))
-        .get();
+    await Promise.all(
+      targets.map(async (targetUrl: string) => {
+        try {
+          const response = await axios.get(targetUrl);
+          const html = response.data;
+          const $ = cheerio.load(html);
+          const pageLinks = $("a")
+            .map((i, el) => $(el).attr("href"))
+            .get();
 
-      const found = links.some((link) => link === linkToFind);
-      res
-        .status(200)
-        .json({ message: found ? "Link found!" : "Link not found." });
-    } catch (error: any) {
-      res.status(500).json({ message: "Error: " + error.message });
-    }
+          results[targetUrl] = pageLinks.includes(linkToFind)
+            ? "Found"
+            : "Not Found";
+        } catch (error: any) {
+          results[targetUrl] = "Error: " + error.message;
+        }
+      })
+    );
+
+    res.status(200).json({ results });
   } else {
     res.status(405).json({ message: "Method Not Allowed" });
   }
